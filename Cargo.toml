@@ -1,0 +1,16 @@
+[package]
+name = "rtx-mogu"
+version = "0.1.0"
+edition = "2021"
+
+[profile.dev]
+opt-level = 3
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[dependencies]
+bevy_math = "0.9.1"
+image = { version = "0.24.5", features = ["png", "jpeg"] }
+minifb = "0.24.0"
+rand = "0.8.5"
