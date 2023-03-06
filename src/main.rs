@@ -30,7 +30,8 @@ const RES_720P: (usize, usize) = (1280, 720);
 const RES_1080P: (usize, usize) = (1920, 1080);
 const RES_1440P: (usize, usize) = (2560, 1440);
 const RES_4K: (usize, usize) = (3840, 2160);
-const RES: (usize, usize) = RES_4K;
+const RES_8K: (usize, usize) = (7680, 4320);
+const RES: (usize, usize) = RES_8K;
 const SAMPLES_PER_PIXEL: u32 = 1500;
 const MAX_DEPTH: u32 = 480;
 
@@ -165,15 +166,15 @@ fn render_mt(mut window: Window, camera: Camera, objs: HittableList) {
                 });
                 let elapsed = start.elapsed();
                 println!("Rendered frame in {:?} ({} FPS)", elapsed, 1.0 / elapsed.as_secs_f32());
-                // let mut copy = buffer.clone();
-                // for i in &mut copy {
-                //     *i = u32::from_be(i.rotate_left(8));
-                // }
-                // image::ImageBuffer::<Rgba<u8>, _>::from_raw(WIDTH as _, HEIGHT as _, unsafe {
-                //     &*slice_from_raw_parts(copy.as_ptr().cast::<u8>(), copy.len() * 4)
-                // }).unwrap().save("output.png").unwrap();
+                let mut copy = buffer.clone();
+                for i in &mut copy {
+                    *i = u32::from_be(i.rotate_left(8));
+                }
+                image::ImageBuffer::<Rgba<u8>, _>::from_raw(WIDTH as _, HEIGHT as _, unsafe {
+                    &*slice_from_raw_parts(copy.as_ptr().cast::<u8>(), copy.len() * 4)
+                }).unwrap().save("output.png").unwrap();
                 swap_chain.lock().unwrap().set(buffer);
-                // break;
+                break;
             }
         });
     }
